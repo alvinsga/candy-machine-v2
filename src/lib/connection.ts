@@ -237,7 +237,7 @@ async function simulateTransaction(
   return res.result;
 }
 
-async function awaitTransactionSignatureConfirmation(
+export async function awaitTransactionSignatureConfirmation(
   txid: TransactionSignature,
   timeout: number,
   connection: Connection,
