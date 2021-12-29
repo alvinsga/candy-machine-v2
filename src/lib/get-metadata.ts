@@ -1,24 +1,37 @@
-import type { Idl, Program } from "@project-serum/anchor";
+import type { Idl, Program, web3 } from "@project-serum/anchor";
 
-export async function getMetadata(
+export const getMetadata = async (
   program: Program<Idl>,
-  candyMachineId: string
-) {
-  const candyMachine = await program.account.candyMachine.fetch(candyMachineId);
-  // Parse out all our metadata and log it out
-  const itemsAvailable = candyMachine.data.itemsAvailable.toNumber();
-  const itemsRedeemed = candyMachine.itemsRedeemed.toNumber();
+  candyMachineId: web3.PublicKey
+) => {
+  const state: any = await program.account.candyMachine.fetch(candyMachineId);
+  const itemsAvailable = state.data.itemsAvailable.toNumber();
+  const itemsRedeemed = state.itemsRedeemed.toNumber();
   const itemsRemaining = itemsAvailable - itemsRedeemed;
-  const goLiveData = candyMachine.data.goLiveDate.toNumber();
-
-  // We will be using this later in our UI so let's generate this now
-  const goLiveDateTimeString = `${new Date(goLiveData * 1000).toUTCString()}`;
 
   return {
-    itemsAvailable,
-    itemsRedeemed,
-    itemsRemaining,
-    goLiveData,
-    goLiveDateTimeString,
+    id: candyMachineId,
+    program,
+    state: {
+      itemsAvailable,
+      itemsRedeemed,
+      itemsRemaining,
+      isSoldOut: itemsRemaining === 0,
+      isActive:
+        state.data.goLiveDate.toNumber() < new Date().getTime() / 1000 &&
+        (state.endSettings
+          ? state.endSettings.endSettingType.date
+            ? state.endSettings.number.toNumber() > new Date().getTime() / 1000
+            : itemsRedeemed < state.endSettings.number.toNumber()
+          : true),
+      goLiveDate: state.data.goLiveDate,
+      treasury: state.wallet,
+      tokenMint: state.tokenMint,
+      gatekeeper: state.data.gatekeeper,
+      endSettings: state.data.endSettings,
+      whitelistMintSettings: state.data.whitelistMintSettings,
+      hiddenSettings: state.data.hiddenSettings,
+      price: state.data.price,
+    },
   };
-}
+};

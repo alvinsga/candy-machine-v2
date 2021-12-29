@@ -4,15 +4,16 @@
   import { Program, Provider, web3 } from "@project-serum/anchor";
   import { MintLayout, TOKEN_PROGRAM_ID, Token } from "@solana/spl-token";
   import { programs } from "@metaplex/js";
-  import { candyMachineProgram } from "./lib/helpers";
+  import { CANDY_MACHINE_PROGRAM } from "./lib/helpers";
   import { getMetadata } from "./lib/get-metadata";
+  import { mintOneToken } from "./lib/mint";
 
   const { solana } = window as any;
-  const network = import.meta.env.VITE_APP_SOLANA_NETWORK.toString();
   const rpcUrl = import.meta.env.VITE_APP_SOLANA_RPC_HOST.toString();
-  const candyMachineId = import.meta.env.VITE_APP_CANDY_MACHINE_ID.toString();
+  const candyMachineId = new web3.PublicKey(
+    import.meta.env.VITE_APP_CANDY_MACHINE_ID.toString()
+  );
   const opts = { preflightCommitment: "processed" };
-
   const connection = new Connection(rpcUrl);
   const provider = new Provider(
     connection,
@@ -23,6 +24,7 @@
   let walletPublicKey = "";
   let itemsRedeemed = "";
   let itemsAvailable = "";
+  let candyMachine = null;
 
   async function checkWalletConnected() {
     const response = await solana.connect({ onlyIfTrusted: true });
@@ -36,12 +38,17 @@
   }
 
   async function getCandyMachineState() {
-    const idl = await Program.fetchIdl(candyMachineProgram, provider);
-    const program = new Program(idl, candyMachineProgram, provider);
-    ({ itemsAvailable, itemsRedeemed } = await getMetadata(
-      program,
-      candyMachineId
-    ));
+    const idl = await Program.fetchIdl(CANDY_MACHINE_PROGRAM, provider);
+    const program = new Program(idl, CANDY_MACHINE_PROGRAM, provider);
+    candyMachine = await getMetadata(program, candyMachineId);
+    ({ itemsAvailable, itemsRedeemed } = candyMachine.state);
+  }
+
+  async function mint() {
+    const idl = await Program.fetchIdl(CANDY_MACHINE_PROGRAM, provider);
+    const program = new Program(idl, CANDY_MACHINE_PROGRAM, provider);
+    await mintOneToken(candyMachine, new web3.PublicKey(walletPublicKey));
+    await getCandyMachineState();
   }
 
   onMount(async () => {
@@ -60,5 +67,5 @@
   <div>Redeemed: {itemsRedeemed}</div>
   <button on:click={connectWallet}>Connect Wallet</button>
   <button on:click={getCandyMachineState}>Get state</button>
-  <button on:click={getCandyMachineState}>Mint</button>
+  <button on:click={mint}>Mint</button>
 </main>
