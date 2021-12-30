@@ -20,9 +20,9 @@ export const mintOneToken = async (
     await getAtaForMint(mint.publicKey, payer)
   )[0];
 
-  // const userPayingAccountAddress = candyMachine.state.tokenMint
-  //   ? (await getAtaForMint(candyMachine.state.tokenMint, payer))[0]
-  //   : payer;
+  const userPayingAccountAddress = candyMachine.state.tokenMint
+    ? (await getAtaForMint(candyMachine.state.tokenMint, payer))[0]
+    : payer;
 
   const candyMachineAddress = candyMachine.id;
   const remainingAccounts = [];
@@ -67,6 +67,92 @@ export const mintOneToken = async (
     ),
   ];
 
+  if (candyMachine.state.whitelistMintSettings) {
+    const mint = new anchor.web3.PublicKey(
+      candyMachine.state.whitelistMintSettings.mint
+    );
+
+    const whitelistToken = (await getAtaForMint(mint, payer))[0];
+    remainingAccounts.push({
+      pubkey: whitelistToken,
+      isWritable: true,
+      isSigner: false,
+    });
+
+    if (candyMachine.state.whitelistMintSettings.mode.burnEveryTime) {
+      const whitelistBurnAuthority = anchor.web3.Keypair.generate();
+
+      remainingAccounts.push({
+        pubkey: mint,
+        isWritable: true,
+        isSigner: false,
+      });
+      remainingAccounts.push({
+        pubkey: whitelistBurnAuthority.publicKey,
+        isWritable: false,
+        isSigner: true,
+      });
+      signers.push(whitelistBurnAuthority);
+      const exists =
+        await candyMachine.program.provider.connection.getAccountInfo(
+          whitelistToken
+        );
+      if (exists) {
+        instructions.push(
+          Token.createApproveInstruction(
+            TOKEN_PROGRAM_ID,
+            whitelistToken,
+            whitelistBurnAuthority.publicKey,
+            payer,
+            [],
+            1
+          )
+        );
+        cleanupInstructions.push(
+          Token.createRevokeInstruction(
+            TOKEN_PROGRAM_ID,
+            whitelistToken,
+            payer,
+            []
+          )
+        );
+      }
+    }
+  }
+  if (candyMachine.state.tokenMint) {
+    const transferAuthority = anchor.web3.Keypair.generate();
+
+    signers.push(transferAuthority);
+    remainingAccounts.push({
+      pubkey: userPayingAccountAddress,
+      isWritable: true,
+      isSigner: false,
+    });
+    remainingAccounts.push({
+      pubkey: transferAuthority.publicKey,
+      isWritable: false,
+      isSigner: true,
+    });
+
+    instructions.push(
+      Token.createApproveInstruction(
+        TOKEN_PROGRAM_ID,
+        userPayingAccountAddress,
+        transferAuthority.publicKey,
+        payer,
+        [],
+        candyMachine.state.price.toNumber()
+      )
+    );
+    cleanupInstructions.push(
+      Token.createRevokeInstruction(
+        TOKEN_PROGRAM_ID,
+        userPayingAccountAddress,
+        payer,
+        []
+      )
+    );
+  }
   instructions.push(
     await candyMachine.program.instruction.mintNft(creatorBump, {
       accounts: {

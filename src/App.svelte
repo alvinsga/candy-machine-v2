@@ -13,10 +13,10 @@
   // Customise the app by changing the following variables.
   const TITLE = "Shapes";
   const DESCRTIPTION = "A collection of shapes on the blockchain";
-  const HEADER_TITLE = "256";
-  const HEADER_LINK = "https://256.wtf";
+  const HEADER_TITLE = "";
+  const HEADER_LINK = "";
   // Your image or GIF needs to be in the /public folder for this to work
-  const IMAGE_LINK = "/test.gif";
+  const IMAGE_LINK = "/example.gif";
   /***********************************/
 
   const { solana } = window as any;
@@ -187,7 +187,7 @@
       <br />
       <!-- Main Body -->
       <div class="p-6">
-        <img src={IMAGE_LINK} alt="" class=" w-1/2 mx-auto" />
+        <img src={IMAGE_LINK} alt="" class=" w-1/2 mx-auto m-5" />
         <div
           class=" text-lg sm:text-2xl font-mono font-bold py-5 tracking-wider"
         >
