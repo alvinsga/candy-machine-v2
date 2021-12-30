@@ -11,10 +11,11 @@ import {
 
 export const mintOneToken = async (
   candyMachine: CandyMachineAccount,
-  payer: anchor.web3.PublicKey
+  payer: anchor.web3.PublicKey,
+  mint: anchor.web3.Keypair
 ): Promise<(string | undefined)[]> => {
-  const mint = anchor.web3.Keypair.generate();
-
+  // const mint = anchor.web3.Keypair.generate();
+  console.log(mint.publicKey);
   const userTokenAccountAddress = (
     await getAtaForMint(mint.publicKey, payer)
   )[0];
