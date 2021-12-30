@@ -8,6 +8,7 @@
   import { awaitTransactionSignatureConfirmation } from "./lib/connection";
   import { fade } from "svelte/transition";
   import type { CandyMachineAccount } from "./models";
+  import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
   /***********************************/
   // Customise the app by changing the following variables.
@@ -44,7 +45,13 @@
   let siteLoading = true;
   let solanaExplorerLink = "";
   let isSoldOut = false;
+  let isActive = false;
   let price = 0;
+  let userWhitelisted = false;
+
+  $: date = new Date(candyMachine?.state.goLiveDate?.toNumber() * 1000);
+  $: whitelistToken = candyMachine?.state.whitelistMintSettings?.mint;
+  $: whitelistPrice = candyMachine?.state.whitelistMintSettings?.discountPrice;
 
   async function checkWalletConnected() {
     try {
@@ -52,6 +59,7 @@
       walletPublicKey = response.publicKey.toString();
       if (response) {
         await getUserBalance();
+        await existsOwnerSPLToken();
       }
     } catch (error) {}
   }
@@ -62,6 +70,7 @@
       walletPublicKey = response.publicKey.toString();
       if (response) {
         await getUserBalance();
+        await existsOwnerSPLToken();
       }
     } catch (error) {}
   }
@@ -71,7 +80,7 @@
       const idl = await Program.fetchIdl(CANDY_MACHINE_PROGRAM, provider);
       const program = new Program(idl, CANDY_MACHINE_PROGRAM, provider);
       candyMachine = await getMetadata(program, candyMachineId);
-      ({ itemsAvailable, itemsRedeemed, isSoldOut, price } =
+      ({ itemsAvailable, itemsRedeemed, isSoldOut, price, isActive } =
         candyMachine.state);
     } catch (error) {
       console.error(error);
@@ -114,6 +123,25 @@
     }
   }
 
+  async function existsOwnerSPLToken() {
+    const tokenAccounts = await connection.getParsedTokenAccountsByOwner(
+      new web3.PublicKey(walletPublicKey),
+      {
+        programId: TOKEN_PROGRAM_ID,
+      }
+    );
+    for (let index = 0; index < tokenAccounts.value.length; index++) {
+      const tokenAccount = tokenAccounts.value[index];
+      const tokenAmount = tokenAccount.account.data.parsed.info.tokenAmount;
+
+      const mint = tokenAccount.account.data.parsed.info.mint;
+      if (mint === whitelistToken.toString() && tokenAmount.uiAmount > 0) {
+        console.log("Welcome to the whitelist!");
+        userWhitelisted = true;
+      }
+    }
+  }
+
   function displaySuccess(mintPublicKey: web3.PublicKey) {
     // It takes time before state change is cascaded across the network
     // so we update this variables manually upon successful completion
@@ -135,8 +163,6 @@
     await getCandyMachineState();
     if (solana) {
       if (solana.isPhantom) await checkWalletConnected();
-    } else {
-      console.log("get Phantom");
     }
     siteLoading = false;
   });
@@ -163,7 +189,13 @@
       transition:fade
     >
       <!-- Top Bar -->
-      <div class=" justify-end flex p-3">
+      <div class="justify-{userWhitelisted ? 'between' : 'end'} flex p-3">
+        {#if userWhitelisted}
+          <div class="flex">
+            <img src="/star.svg" alt="" class="w-5 mr-2" />
+            <div class="my-auto text-gray-600 text-sm">Whitelist</div>
+          </div>
+        {/if}
         <div class="flex">
           {#if !walletPublicKey}
             <span class="my-auto mr-2 rounded-full h-2 w-2 bg-gray-500" />
@@ -208,6 +240,11 @@
               class=" px-3 py-2 rounded-md  bg-sky-600  hover:bg-sky-700 text-white font-bold"
               on:click={connectWallet}>Connect</button
             >
+          {:else if !isActive && !userWhitelisted}
+            <button
+              class=" px-3 py-2 rounded-md  bg-sky-600  hover:bg-sky-700 text-white font-bold disabled:bg-gray-400 "
+              disabled={true}>Mint live @ {date.toUTCString()}</button
+            >
           {:else if isSoldOut}
             <button
               class=" px-3 py-2 rounded-md  bg-sky-600  hover:bg-sky-700 text-white font-bold "
@@ -224,7 +261,12 @@
               {:else if mintSuccessful}
                 <span>Mint succesful! Mint another?</span>
               {:else}
-                <span>Mint ({(price / LAMPORTS_PER_SOL).toFixed(2)} SOL)</span>
+                <span
+                  >Mint ({(
+                    (userWhitelisted ? whitelistPrice : price) /
+                    LAMPORTS_PER_SOL
+                  ).toFixed(2)} SOL)</span
+                >
               {/if}
             </button>
           {/if}
