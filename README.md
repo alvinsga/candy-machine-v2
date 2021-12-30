@@ -7,21 +7,25 @@ This app was built using Svelte + Vite and uses TailwindCSS for styles.
 ## Getting started
 
 Populate the following environment variables in the .env file:
-VITE_APP_CANDY_MACHINE_ID=
-VITE_APP_SOLANA_NETWORK=
-VITE_APP_SOLANA_RPC_HOST=
+
+- VITE_APP_CANDY_MACHINE_ID=
+- VITE_APP_SOLANA_NETWORK=
+- VITE_APP_SOLANA_RPC_HOST=
 
 You can use the following configuration for the devnet:
-VITE_APP_SOLANA_NETWORK=devnet
-VITE_APP_SOLANA_RPC_HOST=https://explorer-api.devnet.solana.com
+
+- VITE_APP_SOLANA_NETWORK=devnet
+- VITE_APP_SOLANA_RPC_HOST=https://explorer-api.devnet.solana.com
 
 Edit the following variables in App.svelte to match your project:
-TITLE
-DESCRIPTION
-IMAGE_LINK
-HEADER_TITLE
-HEADER_LINK
+
+- TITLE
+- DESCRIPTION
+- IMAGE_LINK
+- HEADER_TITLE
+- HEADER_LINK
 
 Then run:
-yarn install
-yarn dev
+
+- yarn install
+- yarn dev
