@@ -4,6 +4,9 @@ This is a barebones implementation of Candy Machine V2 frontend, intended for us
 
 This app was built using Svelte + Vite and uses TailwindCSS for styles.
 
+## Deploy with Vercel
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Falvinsga%2Fcandy-machine-v2&env=VITE_APP_CANDY_MACHINE_ID,VITE_APP_SOLANA_NETWORK,VITE_APP_SOLANA_RPC_HOST&envDescription=Populate%20your%20candy%20machine%20public%20key%2C%20the%20solana%20network(devnet%2Fmainet)%20and%20the%20RPC%20URL)
+
 ## Getting started
 
 Populate the following environment variables in the .env file:
