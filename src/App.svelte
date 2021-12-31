@@ -9,6 +9,7 @@
   import { fade } from "svelte/transition";
   import type { CandyMachineAccount } from "./models";
   import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
+  import confetti from "canvas-confetti";
 
   /***********************************/
   // Customise the app by changing the following variables.
@@ -49,6 +50,7 @@
   let price = 0;
   let userWhitelisted = false;
 
+  // These are computed variables
   $: date = new Date(candyMachine?.state.goLiveDate?.toNumber() * 1000);
   $: whitelistToken = candyMachine?.state.whitelistMintSettings?.mint;
   $: whitelistPrice = candyMachine?.state.whitelistMintSettings?.discountPrice;
@@ -148,6 +150,7 @@
     itemsRedeemed += 1;
     mintSuccessful = true;
     solanaExplorerLink = `https://explorer.solana.com/address/${mintPublicKey}?cluster=${cluster}`;
+    throwConfetti();
   }
 
   async function getUserBalance() {
@@ -157,6 +160,14 @@
     } catch (error) {
       console.error(error);
     }
+  }
+
+  function throwConfetti(): void {
+    confetti({
+      particleCount: 200,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
   }
 
   onMount(async () => {
