@@ -189,9 +189,9 @@
       transition:fade
     >
       <!-- Top Bar -->
-      <div class="justify-{userWhitelisted ? 'between' : 'end'} flex p-3">
+      <div class="justify-end flex p-3">
         {#if userWhitelisted}
-          <div class="flex">
+          <div class="flex mr-auto">
             <img src="/star.svg" alt="" class="w-5 mr-2" />
             <div class="my-auto text-gray-600 text-sm">Whitelist</div>
           </div>
