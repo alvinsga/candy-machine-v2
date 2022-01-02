@@ -14,10 +14,19 @@ Check out the sample website here: https://candy-machine-v2-nine.vercel.app/
 
 Populate the following environment variables in the .env file:
 
+Required:
+
 ```
 - VITE_APP_CANDY_MACHINE_ID=
 - VITE_APP_SOLANA_NETWORK=
 - VITE_APP_SOLANA_RPC_HOST=
+```
+
+Optional:
+Populate with your Google Analytics Measurement ID (in the format G-XXXXXXXXXX)
+
+```
+- VITE_APP_GOOGLE_ANALYTICS
 ```
 
 You can use the following configuration for the devnet:
