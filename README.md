@@ -12,7 +12,7 @@ Check out the sample website here: https://candy-machine-v2-nine.vercel.app/
 
 ## Getting started
 
-Populate the following environment variables in the .env file:
+### Populate the following environment variables in the .env file:
 
 Required:
 
@@ -36,7 +36,7 @@ You can use the following configuration for the devnet:
 - VITE_APP_SOLANA_RPC_HOST=https://explorer-api.devnet.solana.com
 ```
 
-Edit the following variables in App.svelte to match your project:
+### Edit the following variables in App.svelte to match your project:
 
 ```
 - TITLE
@@ -46,7 +46,7 @@ Edit the following variables in App.svelte to match your project:
 - HEADER_LINK
 ```
 
-Then run:
+### Then run:
 
 ```
 - yarn install
