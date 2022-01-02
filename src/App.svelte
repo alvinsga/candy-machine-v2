@@ -15,8 +15,8 @@
   // Customise the app by changing the following variables.
   const TITLE = "Shapes";
   const DESCRTIPTION = "A collection of shapes on the blockchain";
-  const HEADER_TITLE = "";
-  const HEADER_LINK = "";
+  const HEADER_TITLE = "shapes.xyz";
+  const HEADER_LINK = "https://lanablocks.xyz";
   // Your image or GIF needs to be in the /public folder for this to work
   const IMAGE_LINK = "/example.gif";
   /***********************************/
@@ -149,7 +149,10 @@
     // so we update this variables manually upon successful completion
     itemsRedeemed += 1;
     mintSuccessful = true;
-    solanaExplorerLink = `https://explorer.solana.com/address/${mintPublicKey}?cluster=${cluster}`;
+    solanaExplorerLink =
+      cluster == "devnet"
+        ? `https://explorer.solana.com/address/${mintPublicKey}?cluster=devnet`
+        : `https://explorer.solana.com/address/${mintPublicKey}`;
     throwConfetti();
   }
 
@@ -190,7 +193,7 @@
     {#if HEADER_TITLE}
       <a
         href={HEADER_LINK}
-        class="text-white tracking-widest underline underline-offset-4 decoration-2 font-mono"
+        class="text-black tracking-widest underline underline-offset-4 decoration-2 font-mono"
         >{HEADER_TITLE}</a
       >
     {/if}
