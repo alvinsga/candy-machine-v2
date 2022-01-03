@@ -31,3 +31,10 @@ export interface CandyMachineAccount {
   program: anchor.Program;
   state: CandyMachineState;
 }
+
+export interface UserState {
+  walletPublicKey: string;
+  userBalance: number;
+  isWhiteListed: boolean;
+  solanaExplorerLink: string;
+}
