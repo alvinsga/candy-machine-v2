@@ -12,7 +12,7 @@
   import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
   const txTimeout = 30000;
-  const cluster = import.meta.env.VITE_APP_SOLANA_NETWORK.toString();
+  const cluster = import.meta.env.VITE_APP_SOLANA_NETWORK?.toString();
 
   $: date = new Date($candyMachineState?.state.goLiveDate?.toNumber() * 1000);
   $: whitelistPrice =

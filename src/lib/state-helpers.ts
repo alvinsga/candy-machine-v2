@@ -21,7 +21,9 @@ export async function checkWalletConnected(solana: any) {
   try {
     const response = await solana.connect({ onlyIfTrusted: true });
     return response.publicKey.toString();
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function getUserBalance(
@@ -41,21 +43,25 @@ export async function existsOwnerSPLToken(
   connection: Connection,
   whitelistToken: web3.PublicKey
 ) {
-  const tokenAccounts = await connection.getParsedTokenAccountsByOwner(
-    new web3.PublicKey(walletPublicKey),
-    {
-      programId: TOKEN_PROGRAM_ID,
-    }
-  );
-  for (let index = 0; index < tokenAccounts.value.length; index++) {
-    const tokenAccount = tokenAccounts.value[index];
-    const tokenAmount = tokenAccount.account.data.parsed.info.tokenAmount;
+  try {
+    const tokenAccounts = await connection.getParsedTokenAccountsByOwner(
+      new web3.PublicKey(walletPublicKey),
+      {
+        programId: TOKEN_PROGRAM_ID,
+      }
+    );
+    for (let index = 0; index < tokenAccounts.value.length; index++) {
+      const tokenAccount = tokenAccounts.value[index];
+      const tokenAmount = tokenAccount.account.data.parsed.info.tokenAmount;
 
-    const mint = tokenAccount.account.data.parsed.info.mint;
-    if (mint === whitelistToken.toString() && tokenAmount.uiAmount > 0) {
-      console.log("Welcome to the whitelist!");
-      return true;
+      const mint = tokenAccount.account.data.parsed.info.mint;
+      if (mint === whitelistToken.toString() && tokenAmount.uiAmount > 0) {
+        console.log("Welcome to the whitelist!");
+        return true;
+      }
     }
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -63,5 +69,7 @@ export async function connectWallet(solana: any) {
   try {
     const response = await solana.connect();
     return response.publicKey.toString();
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 }

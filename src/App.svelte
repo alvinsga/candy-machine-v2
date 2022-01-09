@@ -25,28 +25,66 @@
   /***********************************/
 
   const { solana } = window as any;
-  const rpcUrl = import.meta.env.VITE_APP_SOLANA_RPC_HOST.toString();
-  const candyMachineId = import.meta.env.VITE_APP_CANDY_MACHINE_ID.toString();
-  const candyMachinePublicKey = new web3.PublicKey(candyMachineId);
+  const rpcUrl = import.meta.env.VITE_APP_SOLANA_RPC_HOST?.toString();
+  const cluster = import.meta.env.VITE_APP_SOLANA_NETWORK?.toString();
+  const candyMachineId = import.meta.env.VITE_APP_CANDY_MACHINE_ID?.toString();
   const opts = { preflightCommitment: "processed" };
-  const connection = new Connection(rpcUrl);
-  const provider = new Provider(
-    connection,
-    solana,
-    opts.preflightCommitment as web3.ConfirmOptions
-  );
 
   let siteLoading = true;
+  let errorOcurred = false;
+  let connection: Connection;
+  let provider: Provider;
+  let candyMachinePublicKey: web3.PublicKey;
 
   $: itemsRedeemed = $candyMachineState?.state.itemsRedeemed;
   $: itemsAvailable = $candyMachineState?.state.itemsAvailable;
 
+  function checkEnvironmentVariables() {
+    // Check if populated
+    if (!rpcUrl || !candyMachineId || !cluster) {
+      if (!rpcUrl) {
+        console.error("RPC URL not populated");
+      }
+      if (!candyMachineId) {
+        console.error("Candy Machine ID not populated");
+      }
+      if (!cluster) {
+        console.error("Environment not populated");
+      }
+      return true;
+    }
+    if (candyMachineId.length < 32 || candyMachineId.length > 44) {
+      console.error(
+        "Candy Machine Public Key is invalid. Enter a length in-between 32 and 44 characters"
+      );
+      return true;
+    }
+    return false;
+  }
+
   onMount(async () => {
+    // Check if environement variables are populated
+    errorOcurred = checkEnvironmentVariables();
+    if (errorOcurred) {
+      return;
+    }
+
+    // If env variables populated, create provider, PK and connection
+    connection = new Connection(rpcUrl);
+    provider = new Provider(
+      connection,
+      solana,
+      opts.preflightCommitment as web3.ConfirmOptions
+    );
+    candyMachinePublicKey = new web3.PublicKey(candyMachineId);
+
+    // Get candy machine state
     $candyMachineState = await getCandyMachineState(
       candyMachinePublicKey,
       provider
     );
 
+    // Establish connection to wallet
     if (solana?.isPhantom) {
       $userState.walletPublicKey = await checkWalletConnected(solana);
       if ($userState.walletPublicKey) {
@@ -64,13 +102,22 @@
       }
     }
 
+    // Stop loading
     siteLoading = false;
   });
 </script>
 
 <main class="h-screen">
-  <!-- Loading Section -->
-  {#if siteLoading}
+  <!-- Error section -->
+  {#if errorOcurred}
+    <div class=" h-full flex">
+      <div class="m-auto">
+        An error occurred. Please check if your environment variables have been
+        populated correctly and redeploy the applcation.
+      </div>
+    </div>
+    <!-- Loading Section -->
+  {:else if siteLoading && !errorOcurred}
     <div class=" h-full flex">
       <div class="lds-hourglass m-auto" />
     </div>
