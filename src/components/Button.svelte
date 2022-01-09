@@ -123,6 +123,14 @@
       class=" px-3 py-2 rounded-md  bg-sky-600  hover:bg-sky-700 text-white font-bold "
       >Sold Out!</button
     >
+  {:else if $userState.userBalance < price}
+    <button
+      class=" px-3 py-2 rounded-md  bg-sky-600  hover:bg-sky-700 text-white font-bold disabled:bg-gray-400"
+      disabled={true}
+      >Insufficient Funds ({(
+        (userWhitelisted ? whitelistPrice : price) / LAMPORTS_PER_SOL
+      ).toFixed(2)} SOL required)</button
+    >
   {:else}
     <button
       class=" px-3 py-2 rounded-md  bg-sky-600  hover:bg-sky-700 text-white font-bold disabled:bg-gray-400"
