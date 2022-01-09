@@ -97,7 +97,7 @@
         $userState.isWhiteListed = await existsOwnerSPLToken(
           $userState.walletPublicKey,
           connection,
-          $candyMachineState.state.whitelistMintSettings.mint
+          $candyMachineState.state.whitelistMintSettings?.mint
         );
       }
     }
