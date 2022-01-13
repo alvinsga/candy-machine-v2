@@ -15,7 +15,7 @@ An example site built using this frontend: https://lanablocks.xyz
 
 ## Getting started
 
-### Populate the following environment variables in the .env file:
+### Rename the .env.example file to .env and populate the following environment variables:
 
 Required:
 
