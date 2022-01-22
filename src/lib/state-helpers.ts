@@ -22,7 +22,7 @@ export async function checkWalletConnected(solana: any) {
     const response = await solana.connect({ onlyIfTrusted: true });
     return response.publicKey.toString();
   } catch (error) {
-    console.error(error);
+    console.log("Unlock your wallet!");
   }
 }
 

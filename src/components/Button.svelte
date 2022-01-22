@@ -10,6 +10,7 @@
   import { awaitTransactionSignatureConfirmation } from "../lib/connection";
   import confetti from "canvas-confetti";
   import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+  import { onMount } from "svelte";
 
   const txTimeout = 30000;
   const cluster = import.meta.env.VITE_APP_SOLANA_NETWORK?.toString();
@@ -24,7 +25,7 @@
 
   let isMinting = false;
   let mintSuccessful = false;
-  export let solana;
+  let { solana } = window as any;
   export let connection;
 
   async function connectWalletButton() {
@@ -36,11 +37,13 @@
         connection
       );
       // Check if user is whitelisted (ie. check if they have token)
-      $userState.isWhiteListed = await existsOwnerSPLToken(
-        $userState.walletPublicKey,
-        connection,
-        $candyMachineState.state.whitelistMintSettings?.mint
-      );
+      if ($candyMachineState.state.whitelistMintSettings) {
+        $userState.isWhiteListed = await existsOwnerSPLToken(
+          $userState.walletPublicKey,
+          connection,
+          $candyMachineState.state.whitelistMintSettings?.mint
+        );
+      }
     }
   }
 
@@ -99,14 +102,28 @@
       origin: { y: 0.6 },
     });
   }
+
+  function getPhantomWallet() {
+    // Here we check for the solana object again.
+    // If its present, reload the page so state is refreshed.
+    solana = (window as any).solana;
+    if (solana) {
+      location.reload();
+    } else {
+      window.open("https://phantom.app/", "_blank");
+    }
+  }
+
+  onMount(() => {
+    solana = (window as any).solana;
+  });
 </script>
 
 <div class="flex flex-col">
   {#if !solana}
     <button
       class=" px-3 py-2 rounded-md  bg-sky-600  hover:bg-sky-700 text-white font-bold"
-      on:click={() => window.open("https://phantom.app/", "_blank")}
-      >Get Phantom Wallet</button
+      on:click={() => getPhantomWallet()}>Get Phantom Wallet</button
     >
   {:else if !$userState.walletPublicKey}
     <button

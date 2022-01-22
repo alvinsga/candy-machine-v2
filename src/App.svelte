@@ -24,7 +24,7 @@
   const IMAGE_LINK = "/example.gif";
   /***********************************/
 
-  const { solana } = window as any;
+  let { solana } = window as any;
   const rpcUrl = import.meta.env.VITE_APP_SOLANA_RPC_HOST?.toString();
   const cluster = import.meta.env.VITE_APP_SOLANA_NETWORK?.toString();
   const candyMachineId = import.meta.env.VITE_APP_CANDY_MACHINE_ID?.toString();
@@ -63,6 +63,7 @@
   }
 
   onMount(async () => {
+    solana = (window as any).solana;
     // Check if environement variables are populated
     errorOcurred = checkEnvironmentVariables();
     if (errorOcurred) {
@@ -83,7 +84,6 @@
       candyMachinePublicKey,
       provider
     );
-
     // Establish connection to wallet
     if (solana?.isPhantom) {
       $userState.walletPublicKey = await checkWalletConnected(solana);
@@ -93,12 +93,14 @@
           $userState.walletPublicKey,
           connection
         );
-        // Check if user is whitelisted (ie. check if they have token)
-        $userState.isWhiteListed = await existsOwnerSPLToken(
-          $userState.walletPublicKey,
-          connection,
-          $candyMachineState.state.whitelistMintSettings?.mint
-        );
+        // If whitelist config populated, check if user is whitelisted (ie. check if they have token)
+        if ($candyMachineState.state.whitelistMintSettings) {
+          $userState.isWhiteListed = await existsOwnerSPLToken(
+            $userState.walletPublicKey,
+            connection,
+            $candyMachineState.state.whitelistMintSettings?.mint
+          );
+        }
       }
     }
 
@@ -150,7 +152,7 @@
         <div class="text-sm sm:text-md font-semibold pb-5 text-gray-600 ">
           {DESCRTIPTION}
         </div>
-        <Button {solana} {connection} />
+        <Button {connection} />
 
         <div class=" tracking-widest font-bold text-sm pt-3 text-gray-400">
           {itemsRedeemed}/{itemsAvailable} claimed
