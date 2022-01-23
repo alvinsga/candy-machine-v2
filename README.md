@@ -6,8 +6,7 @@ The app was built using Svelte + Vite and uses TailwindCSS for styles.
 
 An example site built using this frontend: https://lanablocks.xyz
 
-![demo gif](https://github.com/alvinsga/candy-machine-v2/blob/master/public/demo.gif "Demo Gif")
-
+![demo gif](https://github.com/alvinsga/candy-machine-v2/blob/master/static/demo.gif 'Demo Gif')
 
 ## One-click deploy with Vercel
 
@@ -25,21 +24,17 @@ Required:
 - VITE_APP_SOLANA_RPC_HOST=
 ```
 
-Optional:
-Populate with your Google Analytics Measurement ID (in the format G-XXXXXXXXXX)
-
-```
-- VITE_APP_GOOGLE_ANALYTICS=
-```
-
 ### Example configuration
+
 Devnet:
+
 ```
 - VITE_APP_SOLANA_NETWORK=devnet
 - VITE_APP_SOLANA_RPC_HOST=https://explorer-api.devnet.solana.com
 ```
 
 Mainnet-beta:
+
 ```
 - VITE_APP_SOLANA_NETWORK=mainnet-beta
 - VITE_APP_SOLANA_RPC_HOST=https://api.mainnet-beta.solana.com
@@ -53,6 +48,13 @@ Mainnet-beta:
 - IMAGE_LINK
 - HEADER_TITLE
 - HEADER_LINK
+```
+
+Optional:
+Populate with your Google Analytics Measurement ID (in the format G-XXXXXXXXXX) in app.html
+
+```
+const googleAnalyticsID = 'YOUR_GOOGLE_ANALYTICS_API_KEY_HERE'
 ```
 
 ### Then run:
@@ -71,6 +73,5 @@ Mainnet-beta:
 - Google Analytics tracking
 
 ## Support
+
 <a href="https://www.buymeacoffee.com/alvinsga" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
-
-

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Candy Machine V2</title>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async id="gtag"></script>
+		<script type="module">
+			// REPLACE THIS WITH YOUR GOOGLE ANALYTICS ID
+			const googleAnalyticsID = '';
+			// -----------------------------------------
+
+			if (googleAnalyticsID) {
+				document.getElementById(
+					'gtag'
+				).src = `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsID}`;
+				window.dataLayer = window.dataLayer || [];
+				function gtag() {
+					dataLayer.push(arguments);
+				}
+				gtag('js', new Date());
+				gtag('config', googleAnalyticsID);
+			}
+		</script>
+		%svelte.head%
+	</head>
+	<body>
+		<script>
+			var global = global || window;
+		</script>
+		<div id="svelte">%svelte.body%</div>
+	</body>
+</html>
