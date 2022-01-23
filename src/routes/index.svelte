@@ -99,51 +99,53 @@
 	});
 </script>
 
-<main>
-	<!-- Error section -->
-	{#if errorOcurred}
-		<div class=" h-full flex">
-			<div class="m-auto">
-				An error occurred. Please check if your environment variables have been populated correctly
-				and redeploy the applcation.
-			</div>
-		</div>
-		<!-- Loading Section -->
-	{:else if siteLoading && !errorOcurred}
-		<div class=" h-full flex">
-			<div class="lds-hourglass m-auto" />
-		</div>
-	{:else}
-		<!-- Card -->
-		<div class=" max-w-lg mx-auto bg-white rounded-lg   border-2">
-			<!-- Top Bar -->
-			<Header />
-			<hr />
-			<br />
-			<!-- Main Body -->
-			<div class="p-6">
-				<img src={IMAGE_LINK} alt="" class=" w-1/2 mx-auto m-5" />
-				<div class=" text-lg sm:text-2xl font-mono font-bold py-5 tracking-wider">
-					{TITLE}
-				</div>
-				<div class="text-sm sm:text-md font-semibold pb-5 text-gray-600 ">
-					{DESCRTIPTION}
-				</div>
-				<Button {connection} />
+<svelte:head>
+	<title>SHAPES</title>
+</svelte:head>
 
-				<div class=" tracking-widest font-bold text-sm pt-3 text-gray-400">
-					{itemsRedeemed}/{itemsAvailable} claimed
-				</div>
-				<div class="flex flex-col pt-3">
-					{#if $userState.solanaExplorerLink}
-						<a
-							href={$userState.solanaExplorerLink}
-							target="_blank"
-							class="text-purple-700 font-semibold  p-1">View on Solana Explorer</a
-						>
-					{/if}
-				</div>
+<!-- Error section -->
+{#if errorOcurred}
+	<div class=" h-full flex">
+		<div class="m-auto">
+			An error occurred. Please check if your environment variables have been populated correctly
+			and redeploy the applcation.
+		</div>
+	</div>
+	<!-- Loading Section -->
+{:else if siteLoading && !errorOcurred}
+	<div class=" h-full flex">
+		<div class="lds-hourglass m-auto" />
+	</div>
+{:else}
+	<!-- Card -->
+	<div class=" max-w-lg mx-auto bg-white rounded-lg   border-2">
+		<!-- Top Bar -->
+		<Header />
+		<hr />
+		<br />
+		<!-- Main Body -->
+		<div class="p-6">
+			<img src={IMAGE_LINK} alt="" class=" w-1/2 mx-auto m-5" />
+			<div class=" text-lg sm:text-2xl font-mono font-bold py-5 tracking-wider">
+				{TITLE}
+			</div>
+			<div class="text-sm sm:text-md font-semibold pb-5 text-gray-600 ">
+				{DESCRTIPTION}
+			</div>
+			<Button {connection} />
+
+			<div class=" tracking-widest font-bold text-sm pt-3 text-gray-400">
+				{itemsRedeemed}/{itemsAvailable} claimed
+			</div>
+			<div class="flex flex-col pt-3">
+				{#if $userState.solanaExplorerLink}
+					<a
+						href={$userState.solanaExplorerLink}
+						target="_blank"
+						class="text-purple-700 font-semibold  p-1">View on Solana Explorer</a
+					>
+				{/if}
 			</div>
 		</div>
-	{/if}
-</main>
+	</div>
+{/if}
