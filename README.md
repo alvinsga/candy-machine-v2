@@ -46,8 +46,6 @@ Mainnet-beta:
 - TITLE
 - DESCRIPTION
 - IMAGE_LINK
-- HEADER_TITLE
-- HEADER_LINK
 ```
 
 Optional:
