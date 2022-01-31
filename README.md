@@ -4,15 +4,10 @@ This is a barebones implementation of Candy Machine V2 frontend, intended for us
 
 The app was built using Svelte + Vite and uses TailwindCSS for styles.
 
-## Featured website @ https://gmbeachclub.xyz
+This is code is open sourced from Solarare @ https://solarare.com, a candy machine front end generator.
 
-Built and customized using this frontend.
+![solarare1](https://user-images.githubusercontent.com/44920747/151891236-68d8cad9-3d33-436a-96ed-0b363a8ffe58.png)
 
-![github_example](https://user-images.githubusercontent.com/44920747/151071324-db761b4a-f59b-42e4-92a3-6a274d06f0f6.gif)
-
-## One-click deploy with Vercel
-
-[![Deploy with Vercel](https://vercel.com/button)](<https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Falvinsga%2Fcandy-machine-v2&env=VITE_APP_CANDY_MACHINE_ID,VITE_APP_SOLANA_NETWORK,VITE_APP_SOLANA_RPC_HOST&envDescription=Populate%20your%20candy%20machine%20public%20key%2C%20the%20solana%20network(devnet%2Fmainet)%20and%20the%20RPC%20URL>)
 
 ## Getting started
 
