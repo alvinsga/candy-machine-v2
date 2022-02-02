@@ -16,12 +16,12 @@
 
   /***********************************/
   // Customise the app by changing the following variables.
-  const TITLE = "Shapes";
-  const DESCRTIPTION = "A collection of shapes on the blockchain";
-  const HEADER_TITLE = "shapes.xyz";
-  const HEADER_LINK = "https://lanablocks.xyz";
+  const TITLE = "Dogs";
+  const DESCRTIPTION = "A collection of dogs on the blockchain";
+  const HEADER_TITLE = "dog.xyz";
+  const HEADER_LINK = "https://dogs.xyz";
   // Your image or GIF needs to be in the /public folder for this to work
-  const IMAGE_LINK = "/example.gif";
+  const IMAGE_LINK = "/dog.gif";
   /***********************************/
 
   let { solana } = window as any;
@@ -138,7 +138,7 @@
       transition:fade
     >
       <!-- Top Bar -->
-      <Header />
+      <Header {connection} />
       <hr />
       <br />
       <!-- Main Body -->
