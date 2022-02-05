@@ -4,10 +4,9 @@ This is a barebones implementation of Candy Machine V2 frontend, intended for us
 
 The app was built using Svelte + Vite and uses TailwindCSS for styles.
 
-This is code is open sourced from Solarare @ https://solarare.com, a candy machine front end generator.
+This is code is open-sourced from Solarare @ https://solarare.com, a Candy Machine Mint Page generator.
 
-![solarare1](https://user-images.githubusercontent.com/44920747/151891236-68d8cad9-3d33-436a-96ed-0b363a8ffe58.png)
-
+![solarare](https://user-images.githubusercontent.com/44920747/152659230-2c97b634-d8c1-415e-b9a7-ad7057d2f5a3.png)
 
 ## Getting started
 
