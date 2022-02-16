@@ -20,8 +20,19 @@
     $candyMachineState?.state.whitelistMintSettings?.discountPrice;
   $: isActive = $candyMachineState?.state.isActive;
   $: isSoldOut = $candyMachineState?.state.isSoldOut;
+  $: whitelist = $candyMachineState?.state.whitelistMintSettings;
   $: userWhitelisted = $userState.isWhiteListed;
   $: price = $candyMachineState?.state.price;
+  $: nftPrice = () => {
+    const discountPrice =
+      $candyMachineState?.state?.whitelistMintSettings?.discountPrice?.toNumber();
+    const normalPrice = $candyMachineState?.state?.price.toNumber() ?? 0;
+    if ($userState.isWhiteListed && discountPrice) {
+      return discountPrice;
+    } else {
+      return normalPrice;
+    }
+  };
 
   let isMinting = false;
   let mintSuccessful = false;
@@ -130,24 +141,28 @@
       class=" px-3 py-2 rounded-md  bg-sky-600  hover:bg-sky-700 text-white font-bold"
       on:click={connectWalletButton}>Connect</button
     >
-  {:else if !isActive && !userWhitelisted}
-    <button
-      class=" px-3 py-2 rounded-md  bg-sky-600  hover:bg-sky-700 text-white font-bold disabled:bg-gray-400 "
-      disabled={true}>Mint live @ {date.toUTCString()}</button
-    >
   {:else if isSoldOut}
     <button
       class=" px-3 py-2 rounded-md  bg-sky-600  hover:bg-sky-700 text-white font-bold "
       >Sold Out!</button
     >
-  {:else if $userState.userBalance < price}
+  {:else if !isActive && whitelist?.presale && !userWhitelisted}
+    <!-- Mint not active, presale enabled but user not whitelisted -->
+    <button class=" btn-black" disabled={true}
+      >Whitelist Presale Access Only</button
+    >
+  {:else if !isActive && !whitelist?.presale}
+    <!-- Mint is not active and not a presale -->
+    <button class=" btn-black" disabled={true}
+      >Mint Live @ {date.toUTCString()}</button
+    >
+  {:else if $userState.userBalance < nftPrice()}
     <button
       class=" px-3 py-2 rounded-md  bg-sky-600  hover:bg-sky-700 text-white font-bold disabled:bg-gray-400"
       disabled={true}
-      >Insufficient Funds ({(
-        (userWhitelisted ? whitelistPrice : price) / LAMPORTS_PER_SOL
-      ).toFixed(2)} SOL required)</button
+      >Insufficient Funds ({(nftPrice() / LAMPORTS_PER_SOL).toFixed(2)} SOL required)</button
     >
+    <div />
   {:else}
     <button
       class=" px-3 py-2 rounded-md  bg-sky-600  hover:bg-sky-700 text-white font-bold disabled:bg-gray-400"
@@ -159,11 +174,7 @@
       {:else if mintSuccessful}
         <span>Mint succesful! Mint another?</span>
       {:else}
-        <span
-          >Mint ({(
-            (userWhitelisted ? whitelistPrice : price) / LAMPORTS_PER_SOL
-          ).toFixed(2)} SOL)</span
-        >
+        <span>Mint ({(nftPrice() / LAMPORTS_PER_SOL).toFixed(2)} SOL)</span>
       {/if}
     </button>
   {/if}
