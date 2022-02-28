@@ -65,7 +65,3 @@ Mainnet-beta:
 - Confetti after a successful mint
 - Google Analytics tracking
 
-## Support
-SOL: AfJEqYhgfMipRkAej9dMbEoxdfbwcCVyTAU3mjS29VZ2
-
-
