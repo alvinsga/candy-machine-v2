@@ -6,7 +6,8 @@ The app was built using Svelte + Vite and uses TailwindCSS for styles.
 
 This is code is open-sourced from SolaRare @ https://solarare.com, a Candy Machine Mint Page generator.
 
-![solarare](https://user-images.githubusercontent.com/44920747/152659230-2c97b634-d8c1-415e-b9a7-ad7057d2f5a3.png)
+<img width="1111" alt="Screenshot 2022-03-14 at 00 05 29" src="https://user-images.githubusercontent.com/44920747/158085356-90946e65-6cfa-4cfc-be61-67e7126a96d9.png">
+
 
 ## Getting started
 
