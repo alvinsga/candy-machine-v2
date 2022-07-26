@@ -19,7 +19,7 @@
   const TITLE = "Coffeegang";
   const DESCRTIPTION = "Collection of 10 coffee guy which give access to a magaged hedgefund.";
   const HEADER_TITLE = "Coffeegang";
-  const HEADER_LINK = "http://localhost:3000/";
+  const HEADER_LINK = "https://62de6c384e2c8300a63e062d--astonishing-smakager-c8c61b.netlify.app/index.html";
   // Your image or GIF needs to be in the /public folder for this to work
   const IMAGE_LINK = "/coffee_gif.gif";
   /***********************************/
