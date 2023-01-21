@@ -4,11 +4,6 @@ This is a barebones implementation of Candy Machine V2 frontend, intended for us
 
 The app was built using Svelte + Vite and uses TailwindCSS for styles.
 
-This is code is open-sourced from SolaRare @ https://solarare.com, a Candy Machine Mint Page generator.
-
-<img width="1111" alt="Screenshot 2022-03-14 at 00 05 29" src="https://user-images.githubusercontent.com/44920747/158085356-90946e65-6cfa-4cfc-be61-67e7126a96d9.png">
-
-
 ## Getting started
 
 ### Rename the .env.example file to .env and populate the following environment variables:
